@@ -3,6 +3,14 @@
 version = 3
 
 [[package]]
+name = "advent-of-code-2021"
+version = "0.1.0"
+dependencies = [
+ "sscanf",
+ "utils",
+]
+
+[[package]]
 name = "advent-of-code-tmpl"
 version = "0.1.0"
 dependencies = [
