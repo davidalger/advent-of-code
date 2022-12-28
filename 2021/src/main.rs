@@ -1,1 +1,3 @@
-utils::runner!();
+utils::runner!(
+  day01,
+);
