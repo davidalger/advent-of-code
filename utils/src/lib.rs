@@ -1,5 +1,6 @@
 pub mod prelude;
 pub use clap::Parser;
+pub use paste::paste;
 
 #[derive(Parser, Default)]
 pub struct Args {
@@ -23,9 +24,9 @@ pub fn input_from_file(path: &str) -> String {
 #[macro_export]
 macro_rules! runner {
     ( $($p:ident), *$(,)? ) => {
-        $(mod $p;)*
+        $(pub mod $p;)*
         use $crate::*;
-        fn main() {
+        pub fn runner() {
             let args = Args::parse();
 
             let name = if let Ok(day) = sscanf::sscanf!(args.day, "{char}{str}{u32}") {
@@ -48,6 +49,32 @@ macro_rules! runner {
                 },)*
                 day => unimplemented!("{}", day),
             }
+        }
+    };
+}
+
+#[macro_export]
+macro_rules! benches {
+    ( $( ($day:ident::$part:ident, $input:expr $(, sample_size = $sample_size:expr)?)), +$(,)? ) => {
+        $crate::paste! {
+            $(
+                fn [<$day _ $part _ $input _benchmark>](c: &mut criterion::Criterion) {
+                    let mut group = c.benchmark_group(stringify!($day));
+                    $(group.sampling_mode(criterion::SamplingMode::Flat).sample_size($sample_size);)?
+
+                    group.bench_with_input(
+                        criterion::BenchmarkId::new(stringify!($part), $input),
+                        &$crate::input_from_file(&format!("input/{}-{}.txt", stringify!($day), $input)),
+                        |b, i| b.iter(|| $day::$part(criterion::black_box(i.clone().into()))),
+                    );
+                    group.finish();
+                }
+            )+
+            criterion::criterion_group!(
+                benches,
+                $([<$day _ $part _ $input _benchmark>]), +
+            );
+            criterion::criterion_main!(benches);
         }
     };
 }
