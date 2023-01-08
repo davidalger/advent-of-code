@@ -95,9 +95,9 @@ fn mitm(mut monkeys: Monkeys, rounds: u32, divisor: Option<u128>) -> u128 {
     counter.pop().unwrap() * counter.pop().unwrap()
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 10605),
-    part1_puzzle(part1(input!("puzzle")), 99840),
-    part2_sample(part2(input!("sample")), 2713310158),
-    part2_puzzle(part2(input!("puzzle")), 20683044837),
-);
+tests! {
+    (part1, "sample", 10605)
+    (part1, "puzzle", 99840)
+    (part2, "sample", 2713310158)
+    (part2, "puzzle", 20683044837)
+}

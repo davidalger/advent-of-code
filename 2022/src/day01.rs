@@ -16,9 +16,9 @@ pub fn part2(input: Input) -> u32 {
     input[0..3].iter().sum()
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 24000),
-    part1_puzzle(part1(input!("puzzle")), 67027),
-    part2_sample(part2(input!("sample")), 45000),
-    part2_puzzle(part2(input!("puzzle")), 197291),
-);
+tests! {
+    (part1, "sample", 24000)
+    (part1, "puzzle", 67027)
+    (part2, "sample", 45000)
+    (part2, "puzzle", 197291)
+}

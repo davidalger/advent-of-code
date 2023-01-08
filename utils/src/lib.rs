@@ -126,17 +126,36 @@ macro_rules! input {
 }
 
 #[macro_export]
+macro_rules! test {
+    ( $func:ident, $input:expr, $right:literal ) => {
+        $crate::paste! {
+            test!([<$func _ $input>]($func($crate::input!($input)), $right));
+        }
+    };
+    ( $func:ident($left:expr, $right:expr) ) => {
+        #[test]
+        fn $func() {
+            assert_eq!($left, $right);
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! tests {
-    ( $( $f:ident($left:expr, $right:expr) ), *, ) => {
+    ( $( ($func:ident, $input:expr, $right:literal) )+ ) => {
+        $crate::paste! {
+            tests! {$(
+                [<$func _ $input>]($func($crate::input!($input)), $right)
+            )+}
+        }
+    };
+    ( $( $func:ident($left:expr, $right:expr) )+ ) => {
         #[cfg(test)]
         mod tests {
             use super::*;
         $(
-            #[test]
-            fn $f() {
-                assert_eq!($left, $right);
-            }
-        )*
+            test!($func($left, $right));
+        )+
         }
     };
 }

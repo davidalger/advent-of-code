@@ -88,9 +88,9 @@ fn distance(a: Pos, b: Pos) -> u32 {
     a.0.abs_diff(b.0) + a.1.abs_diff(b.1)
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 26),
-    part1_puzzle(part1(input!("puzzle")), 5511201),
-    part2_sample(part2(input!("sample")), 56000011),
-    part2_puzzle(part2(input!("puzzle")), 11318723411840),
-);
+tests! {
+    (part1, "sample", 26)
+    (part1, "puzzle", 5511201)
+    (part2, "sample", 56000011)
+    (part2, "puzzle", 11318723411840)
+}

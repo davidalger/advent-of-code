@@ -103,9 +103,9 @@ fn scenic_score(grid: &Grid, x: usize, y: usize) -> u32 {
     left * right * up * down
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 21),
-    part1_puzzle(part1(input!("puzzle")), 1703),
-    part2_sample(part2(input!("sample")), 8),
-    part2_puzzle(part2(input!("puzzle")), 496650),
-);
+tests! {
+    (part1, "sample", 21)
+    (part1, "puzzle", 1703)
+    (part2, "sample", 8)
+    (part2, "puzzle", 496650)
+}

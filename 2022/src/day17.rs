@@ -261,14 +261,19 @@ fn render(grid: &[u8]) -> String {
     str
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 3068),
-    part1_puzzle(part1(input!("puzzle")), 3161),
-    part2_sample(part2(input!("sample")), 1514285714288),
-    part2_puzzle(part2(input!("puzzle")), 1575931232076),
-    sim5k_sample(simulate(&input!("sample"), 5000).0.len(), 7577),
-    sim5k_puzzle(simulate(&input!("puzzle"), 5000).0.len(), 7879),
-    sim10_sample(
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    test!(part1, "sample", 3068);
+    test!(part1, "puzzle", 3161);
+    test!(part2, "sample", 1514285714288);
+    test!(part2, "puzzle", 1575931232076);
+
+    test!(sim5k_sample(simulate(&input!("sample"), 5000).0.len(), 7577));
+    test!(sim5k_puzzle(simulate(&input!("puzzle"), 5000).0.len(), 7879));
+
+    test!(sim10_sample(
         render(&simulate(&input!("sample"), 10).0).lines().collect_vec(),
         vec![
             "|....#..|",
@@ -290,8 +295,9 @@ tests!(
             "|..####.|",
             "+-------+",
         ]
-    ),
-    sim10_puzzle(
+    ));
+
+    test!(sim10_puzzle(
         render(&simulate(&input!("puzzle"), 10).0).lines().collect_vec(),
         vec![
             "|..##...|",
@@ -308,5 +314,5 @@ tests!(
             "|.#.####|",
             "+-------+",
         ]
-    ),
-);
+    ));
+}

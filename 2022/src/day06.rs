@@ -17,9 +17,9 @@ fn marker(input: &str, len: usize) -> usize {
     0
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 7),
-    part1_puzzle(part1(input!("puzzle")), 1912),
-    part2_sample(part2(input!("sample")), 19),
-    part2_puzzle(part2(input!("puzzle")), 2122),
-);
+tests! {
+    (part1, "sample", 7)
+    (part1, "puzzle", 1912)
+    (part2, "sample", 19)
+    (part2, "puzzle", 2122)
+}

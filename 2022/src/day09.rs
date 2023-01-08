@@ -74,10 +74,10 @@ fn track_y(leader: Coordinate, follower: &mut Coordinate, y: i32) {
     }
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 13),
-    part1_puzzle(part1(input!("puzzle")), 6284),
-    part2_sample(part2(input!("sample")), 1),
-    part2_sample2(part2(input!("sample2")), 36),
-    part2_puzzle(part2(input!("puzzle")), 2661),
-);
+tests! {
+    (part1, "sample", 13)
+    (part1, "puzzle", 6284)
+    (part2, "sample", 1)
+    (part2, "sample2", 36)
+    (part2, "puzzle", 2661)
+}

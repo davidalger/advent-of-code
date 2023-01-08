@@ -42,9 +42,9 @@ fn priority(mut sets: Vec<HashSet<char>>) -> u32 {
     }
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 157),
-    part1_puzzle(part1(input!("puzzle")), 7878),
-    part2_sample(part2(input!("sample")), 70),
-    part2_puzzle(part2(input!("puzzle")), 2760),
-);
+tests! {
+    (part1, "sample", 157)
+    (part1, "puzzle", 7878)
+    (part2, "sample", 70)
+    (part2, "puzzle", 2760)
+}

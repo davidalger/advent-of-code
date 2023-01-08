@@ -23,9 +23,9 @@ pub fn part2(input: Input) -> u32 {
     score
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 7),
-    part1_puzzle(part1(input!("puzzle")), 1301),
-    part2_sample(part2(input!("sample")), 5),
-    part2_puzzle(part2(input!("puzzle")), 1346),
-);
+tests! {
+    (part1, "sample", 7)
+    (part1, "puzzle", 1301)
+    (part2, "sample", 5)
+    (part2, "puzzle", 1346)
+}

@@ -73,10 +73,13 @@ fn draw(c: i32, x: i32) -> String {
 }
 
 #[cfg(test)]
-tests!(
-    part1_sample(part1(input!("sample")), 13140),
-    part1_puzzle(part1(input!("puzzle")), 14560),
-    part2_sample(
+mod tests {
+    use super::*;
+
+    test!(part1, "sample", 13140);
+    test!(part1, "puzzle", 14560);
+
+    test!(part2_sample(
         part2(input!("sample")).lines().collect::<Vec<_>>(),
         vec![
             "##..##..##..##..##..##..##..##..##..##..",
@@ -86,8 +89,9 @@ tests!(
             "######......######......######......####",
             "#######.......#######.......#######.....",
         ]
-    ),
-    part2_puzzle(
+    ));
+
+    test!(part2_puzzle(
         part2(input!("puzzle")).lines().collect::<Vec<_>>(),
         vec![
             "####.#..#.###..#..#.####.###..#..#.####.",
@@ -97,5 +101,5 @@ tests!(
             "#....#.#..#.#..#..#.#....#....#..#.#....",
             "####.#..#.#..#.#..#.####.#.....##..####.",
         ]
-    ),
-);
+    ));
+}

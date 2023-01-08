@@ -86,9 +86,9 @@ fn successors(grid: &Grid, p: &Pos) -> Vec<Pos> {
         .collect()
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 31),
-    part1_puzzle(part1(input!("puzzle")), 423),
-    part2_sample(part2(input!("sample")), 29),
-    part2_puzzle(part2(input!("puzzle")), 416),
-);
+tests! {
+    (part1, "sample", 31)
+    (part1, "puzzle", 423)
+    (part2, "sample", 29)
+    (part2, "puzzle", 416)
+}

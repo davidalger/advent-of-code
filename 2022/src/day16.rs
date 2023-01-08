@@ -111,9 +111,9 @@ fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
         .collect()
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 1651),
-    part1_puzzle(part1(input!("puzzle")), 2029),
-    part2_sample(part2(input!("sample")), 1707),
-    part2_puzzle(part2(input!("puzzle")), 2723),
-);
+tests! {
+    (part1, "sample", 1651)
+    (part1, "puzzle", 2029)
+    (part2, "sample", 1707)
+    (part2, "puzzle", 2723)
+}
