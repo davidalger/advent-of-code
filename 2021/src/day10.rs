@@ -102,11 +102,11 @@ fn get_matching(t: char) -> char {
     *HashMap::from([('(', ')'), ('[', ']'), ('{', '}'), ('<', '>')]).get(&t).unwrap()
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 26397),
-    part1_extra_close(part1(input!("extra-close")), 1197),
-    part1_invalid_open(part1(input!("invalid-open")), 26400),
-    part1_puzzle(part1(input!("puzzle")), 411471),
-    part2_sample(part2(input!("sample")), 288957),
-    part2_puzzle(part2(input!("puzzle")), 3122628974),
-);
+tests! {
+    (part1, "sample", 26397)
+    (part1, "extra-close", 1197)
+    (part1, "invalid-open", 26400)
+    (part1, "puzzle", 411471)
+    (part2, "sample", 288957)
+    (part2, "puzzle", 3122628974)
+}

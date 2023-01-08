@@ -75,9 +75,9 @@ fn resolve(monkey: &str, monkeys: &Monkeys) -> Option<u128> {
     }
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 152),
-    part1_puzzle(part1(input!("puzzle")), 158731561459602),
-    part2_sample(part2(input!("sample")), 301),
-    part2_puzzle(part2(input!("puzzle")), 3769668716709),
-);
+tests! {
+    (part1, "sample", 152)
+    (part1, "puzzle", 158731561459602)
+    (part2, "sample", 301)
+    (part2, "puzzle", 3769668716709)
+}

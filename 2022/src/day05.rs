@@ -73,9 +73,9 @@ fn top_crates(stacks: &Vec<VecDeque<char>>) -> String {
     top_crates.join("")
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), "CMZ"),
-    part1_puzzle(part1(input!("puzzle")), "FCVRLMVQP"),
-    part2_sample(part2(input!("sample")), "MCD"),
-    part2_puzzle(part2(input!("puzzle")), "RWLWGJGFD"),
-);
+tests! {
+    (part1, "sample", "CMZ")
+    (part1, "puzzle", "FCVRLMVQP")
+    (part2, "sample", "MCD")
+    (part2, "puzzle", "RWLWGJGFD")
+}

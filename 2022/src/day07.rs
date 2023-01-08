@@ -42,9 +42,9 @@ pub fn part2(sizes: Sizes) -> u32 {
     sizes.iter().map(|(_, size)| *size).filter(|size| need <= *size).sorted().next().unwrap()
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 95437),
-    part1_puzzle(part1(input!("puzzle")), 1513699),
-    part2_sample(part2(input!("sample")), 24933642),
-    part2_puzzle(part2(input!("puzzle")), 7991939),
-);
+tests! {
+    (part1, "sample", 95437)
+    (part1, "puzzle", 1513699)
+    (part2, "sample", 24933642)
+    (part2, "puzzle", 7991939)
+}

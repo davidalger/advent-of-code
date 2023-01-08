@@ -65,9 +65,9 @@ fn cmp(a: &Value, b: &Value) -> Ordering {
     }
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 13),
-    part1_puzzle(part1(input!("puzzle")), 5905),
-    part2_sample(part2(input!("sample")), 140),
-    part2_puzzle(part2(input!("puzzle")), 21691),
-);
+tests! {
+    (part1, "sample", 13)
+    (part1, "puzzle", 5905)
+    (part2, "sample", 140)
+    (part2, "puzzle", 21691)
+}

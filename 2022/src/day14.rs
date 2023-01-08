@@ -235,9 +235,9 @@ fn frame_buffer(grid: &Grid, width: u16, height: u16, scale: u16) -> Vec<u8> {
     data
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 24),
-    part1_puzzle(part1(input!("puzzle")), 799),
-    part2_sample(part2(input!("sample")), 93),
-    part2_puzzle(part2(input!("puzzle")), 29076),
-);
+tests! {
+    (part1, "sample", 24)
+    (part1, "puzzle", 799)
+    (part2, "sample", 93)
+    (part2, "puzzle", 29076)
+}

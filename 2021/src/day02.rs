@@ -42,9 +42,9 @@ pub fn part2(moves: Moves) -> u32 {
     x * z
 }
 
-tests!(
-    part1_sample(part1(input!("sample")), 150),
-    part1_puzzle(part1(input!("puzzle")), 1804520),
-    part2_sample(part2(input!("sample")), 900),
-    part2_puzzle(part2(input!("puzzle")), 1971095320),
-);
+tests! {
+    (part1, "sample", 150)
+    (part1, "puzzle", 1804520)
+    (part2, "sample", 900)
+    (part2, "puzzle", 1971095320)
+}
