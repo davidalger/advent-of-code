@@ -5,18 +5,18 @@ use utils::prelude::*;
 #[derive(Clone)]
 pub struct Valve {
     rate: u32,
-    edges: Vec<u32>,
+    edges: Vec<usize>,
 }
-type Visited = FxHashMap<(u32, u32, u64), u32>;
+type Visited = FxHashMap<(usize, u32, u64), u32>;
 type Opened = u64; // 1-bit per valve
 
-parse!(|i| -> FxHashMap<u32, Valve> {
-    let ids: FxHashMap<&str, u32> = i
+parse!(|i| -> FxHashMap<usize, Valve> {
+    let ids: FxHashMap<&str, usize> = i
         .lines()
         .map(|l| l.split(' ').nth(1).unwrap())
         .sorted() // 'AA' will be index 0
         .enumerate()
-        .map(|(a, b)| (b, a as u32))
+        .map(|(a, b)| (b, a))
         .collect();
 
     i.lines()
@@ -45,7 +45,13 @@ pub fn part2(valves: Valves) -> u32 {
     value
 }
 
-fn traverse(cur: u32, valves: &Valves, opened: &mut Opened, visited: &mut Visited, minute: u32) -> u32 {
+fn traverse(
+    cur: usize,
+    valves: &Valves,
+    opened: &mut Opened,
+    visited: &mut Visited,
+    minute: u32,
+) -> u32 {
     if minute == 0 {
         return 0;
     }
