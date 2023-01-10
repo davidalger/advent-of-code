@@ -11,25 +11,23 @@ type Visited = FxHashMap<(u32, u32, u64), u32>;
 type Opened = u64; // 1-bit per valve
 
 parse!(|i| -> FxHashMap<u32, Valve> {
-    {
-        let ids: FxHashMap<&str, u32> = i
-            .lines()
-            .map(|l| l.split(' ').nth(1).unwrap())
-            .sorted() // 'AA' will be index 0
-            .enumerate()
-            .map(|(a, b)| (b, a as u32))
-            .collect();
+    let ids: FxHashMap<&str, u32> = i
+        .lines()
+        .map(|l| l.split(' ').nth(1).unwrap())
+        .sorted() // 'AA' will be index 0
+        .enumerate()
+        .map(|(a, b)| (b, a as u32))
+        .collect();
 
-        i.lines()
-            .map(|l| {
-                let (id, rate, _, edges) =
-                    sscanf!(l, "Valve {String} has flow rate={u32}; {str:/.*valve[s]?/} {String}")
-                        .unwrap();
-                let edges = edges.split(", ").map(|id| ids[id]).collect();
-                (ids[id.as_str()], Valve { rate, edges })
-            })
-            .collect()
-    }
+    i.lines()
+        .map(|l| {
+            let (id, rate, _, edges) =
+                sscanf!(l, "Valve {String} has flow rate={u32}; {str:/.*valve[s]?/} {String}")
+                    .unwrap();
+            let edges = edges.split(", ").map(|id| ids[id]).collect();
+            (ids[id.as_str()], Valve { rate, edges })
+        })
+        .collect()
 } as Valves);
 
 pub fn part1(valves: Valves) -> u32 {

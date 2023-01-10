@@ -2,35 +2,33 @@ use sscanf::sscanf;
 use utils::prelude::*;
 
 parse!(|i| -> HashMap<String, u32> {
-    {
-        let mut cwd = Vec::new();
-        let mut sizes = HashMap::new();
-        for l in i.lines() {
-            if let Ok(dir) = sscanf!(l, "$ cd {String}") {
-                if dir == ".." {
-                    cwd.pop();
-                } else {
-                    cwd.push(dir);
-                }
+    let mut cwd = Vec::new();
+    let mut sizes = HashMap::new();
+    for l in i.lines() {
+        if let Ok(dir) = sscanf!(l, "$ cd {String}") {
+            if dir == ".." {
+                cwd.pop();
+            } else {
+                cwd.push(dir);
             }
-            if let Ok((size, _)) = sscanf!(l, "{u32} {String}") {
-                let mut cwd = cwd.clone();
-                loop {
-                    let dir = cwd.join("-");
-                    if let Some(cur) = sizes.get(&dir) {
-                        sizes.insert(dir, size + cur);
-                    } else {
-                        sizes.insert(dir, size);
-                    }
-                    cwd.pop();
-                    if cwd.is_empty() {
-                        break;
-                    }
+        }
+        if let Ok((size, _)) = sscanf!(l, "{u32} {String}") {
+            let mut cwd = cwd.clone();
+            loop {
+                let dir = cwd.join("-");
+                if let Some(cur) = sizes.get(&dir) {
+                    sizes.insert(dir, size + cur);
+                } else {
+                    sizes.insert(dir, size);
+                }
+                cwd.pop();
+                if cwd.is_empty() {
+                    break;
                 }
             }
         }
-        sizes
     }
+    sizes
 } as Sizes);
 
 pub fn part1(sizes: Sizes) -> u32 {
