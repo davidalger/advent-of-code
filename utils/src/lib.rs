@@ -36,18 +36,27 @@ macro_rules! runner {
             };
             println!("\n🎄 Advent of Code {} {} 🎄\n", module_path!().split('_').last().unwrap(), name);
 
-            match args.day.as_str() {
-                $(stringify!($p) => {
-                    let input = input_from_file(&format!("input/{}-{}.txt", stringify!($p), args.input));
-                    if args.part1 || !args.part1 ^ args.part2 {
-                        println!("{}", $p::part1(input.clone().into()));
-                    }
-                    if args.part2 || !args.part1 ^ args.part2 {
-                        println!("{}", $p::part2(input.clone().into()));
-                    }
-                    println!();
-                },)*
+            let part1 = match args.day.as_str() {
+                $(stringify!($p) => |input: String| { $p::part1(input.into()).to_string() },)*
                 day => unimplemented!("{}", day),
+            };
+
+            let part2 = match args.day.as_str() {
+                $(stringify!($p) => |input: String| { $p::part2(input.into()).to_string() },)*
+                day => unimplemented!("{}", day),
+            };
+
+            let input = input_from_file(&format!("input/{}-{}.txt", args.day, args.input));
+            for (p, (f, b)) in [
+                (part1, args.part1 || !args.part1 ^ args.part2),
+                (part2, args.part2 || !args.part1 ^ args.part2),
+            ].iter().enumerate() {
+                if *b {
+                    let start = std::time::SystemTime::now();
+                    let result = f(input.clone());
+                    let duration = std::time::SystemTime::now().duration_since(start).unwrap();
+                    println!("-- Part {} ({:?}) ---\n\n{}\n", p + 1, duration, result);
+                }
             }
         }
     };
