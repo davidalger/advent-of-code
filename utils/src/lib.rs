@@ -81,13 +81,13 @@ macro_rules! benches {
 
 #[macro_export]
 macro_rules! parse {
-    (|$i:ident| -> $t:ty {$p:expr}) => {
-        parse!(|$i| -> $t { $p } as Input);
+    (|$i:ident| -> $t:ty $p:block) => {
+        parse!(|$i| -> $t $p as Input);
     };
-    (|$i:ident| -> $t:ty {$p:expr} as $s:tt) => {
-        parse!(|$i| -> $t { $p } as $s with derive());
+    (|$i:ident| -> $t:ty $p:block as $s:tt) => {
+        parse!(|$i| -> $t $p as $s with derive());
     };
-    (|$i:ident| -> $t:ty {$p:expr} as $s:tt with derive($($d:tt), *)) => {
+    (|$i:ident| -> $t:ty $p:block as $s:tt with derive($($d:tt), *)) => {
         #[derive($($d,)*)]
         pub struct $s($t);
 
@@ -107,7 +107,7 @@ macro_rules! parse {
 
         impl From<String> for $s {
             fn from($i: String) -> Self {
-                Self({ $p })
+                Self( $p )
             }
         }
     };
@@ -115,14 +115,14 @@ macro_rules! parse {
 
 #[macro_export]
 macro_rules! input {
-    ($x:expr) => {{
+    ($x:expr) => {
         $crate::input_from_file(&format!(
             "input/{}-{}.txt",
             module_path!().split("::").nth(1).unwrap(),
             $x
         ))
         .into()
-    }};
+    };
 }
 
 #[macro_export]
