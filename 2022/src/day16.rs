@@ -92,6 +92,7 @@ fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
         .collect_vec();
 
     ids.iter()
+        .filter(|(a, _)| a.iter().map(|&id| valves[id].rate >= 20).filter(|&t| t).count() == 1)
         .map(|(a, b)| {
             [a, b]
                 .iter()

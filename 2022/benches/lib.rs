@@ -32,7 +32,7 @@ utils::benches![
     (day15::part1, "puzzle", sample_size = 30),
     (day15::part2, "puzzle", sample_size = 40),
     (day16::part1, "puzzle", sample_size = 10),
-    (day16::part2, "sample", sample_size = 10),
+    (day16::part2, "puzzle", sample_size = 10),
     (day17::part1, "puzzle"),
     (day17::part2, "puzzle"),
 ];
