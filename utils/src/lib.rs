@@ -68,6 +68,8 @@ macro_rules! benches {
         $crate::paste! {
             $(
                 fn [<$day _ $part _ $input _benchmark>](c: &mut criterion::Criterion) {
+                    std::env::set_var("CARGO_BENCH", "true");
+
                     let mut group = c.benchmark_group(stringify!($day));
                     $(group.sampling_mode(criterion::SamplingMode::Flat).sample_size($sample_size);)?
 
