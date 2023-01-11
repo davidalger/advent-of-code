@@ -8,7 +8,6 @@ use std::fs::File;
 pub struct Input {
     grid: Grid,
     start: Pos,
-    render: bool,
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
@@ -63,13 +62,7 @@ impl From<String> for Input {
         }
         grid.truncate(len);
 
-        #[cfg(test)]
-        let render = false;
-
-        #[cfg(not(test))]
-        let render = true;
-
-        Self { grid, render, start: Pos(500, 0) }
+        Self { grid, start: Pos(500, 0) }
     }
 }
 
@@ -77,7 +70,7 @@ pub fn part1(mut input: Input) -> usize {
     let (frames, size) =
         fill_sand(&mut input.grid, input.start, |grid, p| p.1 + 1 >= grid.len(), 7);
 
-    if input.render {
+    if cfg!(not(test)) && std::env::var_os("CARGO_BENCH").is_none() {
         print_grid(frames.last().unwrap());
         encode_gif("output/day14-part1.gif", &frames);
     }
@@ -95,7 +88,7 @@ pub fn part2(mut input: Input) -> usize {
         250,
     );
 
-    if input.render {
+    if cfg!(not(test)) && std::env::var_os("CARGO_BENCH").is_none() {
         encode_gif("output/day14-part2.gif", &frames);
     }
     size
