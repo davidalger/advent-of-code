@@ -7,8 +7,8 @@ pub struct Valve {
     rate: u32,
     edges: Vec<usize>,
 }
-type Visited = FxHashMap<(usize, u32, u64), u32>;
-type Opened = u64; // 1-bit per valve
+type Visited = FxHashMap<(usize, u32, BitSet), u32>;
+type BitSet = u64; // 1-bit per valve
 
 parse!(|i| -> Vec<Valve> {
     let ids: FxHashMap<&str, usize> = i
@@ -18,7 +18,8 @@ parse!(|i| -> Vec<Valve> {
         .map(|(a, b)| (b.split(' ').nth(1).unwrap(), a))
         .collect();
 
-    i.lines()
+    let valves = i
+        .lines()
         .sorted()
         .map(|l| {
             let (_, rate, _, edges) =
@@ -26,47 +27,45 @@ parse!(|i| -> Vec<Valve> {
             let edges = edges.split(", ").map(|id| ids[id]).collect();
             Valve { rate, edges }
         })
-        .collect()
+        .collect_vec();
+
+    if valves.len() as u32 > BitSet::BITS {
+        panic!("Too many valves for BitSet");
+    }
+
+    valves
 } as Valves);
 
 pub fn part1(valves: Valves) -> u32 {
-    traverse(0, &valves, &mut 0, &mut Visited::default(), 30)
+    traverse(0, &valves, 0, &mut Visited::default(), 30)
 }
 
 pub fn part2(valves: Valves) -> u32 {
     let minutes = 26;
     let mut value = 0;
     for (a, b) in combinations(&valves) {
-        let a = traverse(0, &a, &mut 0, &mut Visited::default(), minutes);
-        let b = traverse(0, &b, &mut 0, &mut Visited::default(), minutes);
+        let a = traverse(0, &a, 0, &mut Visited::default(), minutes);
+        let b = traverse(0, &b, 0, &mut Visited::default(), minutes);
         value = value.max(a + b);
     }
     value
 }
 
-fn traverse(
-    cur: usize,
-    valves: &Valves,
-    opened: &mut Opened,
-    visited: &mut Visited,
-    minute: u32,
-) -> u32 {
-    if minute == 0 {
+fn traverse(id: usize, valves: &Valves, opened: BitSet, visited: &mut Visited, steps: u32) -> u32 {
+    if steps == 0 {
         return 0;
     }
 
     let mut value = 0;
-    if valves[cur].rate > 0 && (*opened & (1 << cur)) == 0 {
-        *opened |= 1 << cur;
-        value = valves[cur].rate * (minute - 1);
-        value += traverse(cur, valves, opened, visited, minute - 1);
-        *opened &= !(1 << cur);
+    if valves[id].rate > 0 && (opened & (1 << id)) == 0 {
+        value = valves[id].rate * (steps - 1)
+            + traverse(id, valves, opened | 1 << id, visited, steps - 1);
     }
 
-    for next in &valves[cur].edges {
-        let hash = (*next, minute, *opened);
+    for id in &valves[id].edges {
+        let hash = (*id, steps, opened);
         if !visited.contains_key(&hash) {
-            let v = traverse(*next, valves, opened, visited, minute - 1);
+            let v = traverse(*id, valves, opened, visited, steps - 1);
             visited.insert(hash, v);
             value = value.max(v);
         } else {
