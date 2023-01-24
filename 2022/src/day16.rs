@@ -10,22 +10,21 @@ pub struct Valve {
 type Visited = FxHashMap<(usize, u32, u64), u32>;
 type Opened = u64; // 1-bit per valve
 
-parse!(|i| -> FxHashMap<usize, Valve> {
+parse!(|i| -> Vec<Valve> {
     let ids: FxHashMap<&str, usize> = i
         .lines()
-        .map(|l| l.split(' ').nth(1).unwrap())
         .sorted() // 'AA' will be index 0
         .enumerate()
-        .map(|(a, b)| (b, a))
+        .map(|(a, b)| (b.split(' ').nth(1).unwrap(), a))
         .collect();
 
     i.lines()
+        .sorted()
         .map(|l| {
-            let (id, rate, _, edges) =
-                sscanf!(l, "Valve {String} has flow rate={u32}; {str:/.*valve[s]?/} {String}")
-                    .unwrap();
+            let (_, rate, _, edges) =
+                sscanf!(l, "Valve {str} has flow rate={u32}; {str:/.*valve[s]?/} {str}").unwrap();
             let edges = edges.split(", ").map(|id| ids[id]).collect();
-            (ids[id.as_str()], Valve { rate, edges })
+            Valve { rate, edges }
         })
         .collect()
 } as Valves);
@@ -57,14 +56,14 @@ fn traverse(
     }
 
     let mut value = 0;
-    if valves[&cur].rate > 0 && (*opened & (1 << cur)) == 0 {
+    if valves[cur].rate > 0 && (*opened & (1 << cur)) == 0 {
         *opened |= 1 << cur;
-        value = valves[&cur].rate * (minute - 1);
+        value = valves[cur].rate * (minute - 1);
         value += traverse(cur, valves, opened, visited, minute - 1);
         *opened &= !(1 << cur);
     }
 
-    for next in &valves[&cur].edges {
+    for next in &valves[cur].edges {
         let hash = (*next, minute, *opened);
         if !visited.contains_key(&hash) {
             let v = traverse(*next, valves, opened, visited, minute - 1);
@@ -78,12 +77,13 @@ fn traverse(
 }
 
 fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
-    let ids: FxHashSet<_> = valves.keys().collect();
+    let ids: FxHashSet<_> = (0..valves.len()).collect();
     let ids = valves
         .iter()
+        .enumerate()
         .filter(|(_, v)| v.rate > 0)
         .map(|(id, _)| id)
-        .combinations(valves.iter().filter(|v| v.1.rate > 0).count() / 2)
+        .combinations(valves.iter().enumerate().filter(|(_, v)| v.rate > 0).count() / 2)
         .map(|s| {
             let a = s.iter().cloned().collect::<FxHashSet<_>>();
             let b = ids.difference(&a).cloned().collect::<FxHashSet<_>>();
@@ -100,11 +100,12 @@ fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
                     Valves(
                         valves
                             .iter()
+                            .enumerate()
                             .map(|(id, v)| {
-                                if s.contains(id) {
-                                    (*id, v.clone())
+                                if s.contains(&id) {
+                                    v.clone()
                                 } else {
-                                    (*id, Valve { rate: 0, ..v.clone() })
+                                    Valve { rate: 0, ..v.clone() }
                                 }
                             })
                             .collect(),
