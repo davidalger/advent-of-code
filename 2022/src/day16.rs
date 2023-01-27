@@ -46,14 +46,22 @@ pub fn part1(valves: Valves) -> u32 {
 }
 
 pub fn part2(valves: Valves) -> u32 {
-    let minutes = 26;
-    let mut value = 0;
-    for (a, b) in combinations(&valves) {
-        let a = traverse(0, &a, 0, &mut Visited::default(), minutes);
-        let b = traverse(0, &b, 0, &mut Visited::default(), minutes);
-        value = value.max(a + b);
-    }
-    value
+    let mut visited = Visited::default();
+    visited.reserve(125000);
+
+    combinations(&valves)
+        .iter()
+        .map(|(a, b)| {
+            [a, b]
+                .iter()
+                .map(|valves| {
+                    visited.clear();
+                    traverse(0, valves, 0, &mut visited, 26)
+                })
+                .sum()
+        })
+        .max()
+        .unwrap()
 }
 
 fn traverse(id: usize, valves: &Valves, opened: BitSet, visited: &mut Visited, steps: u32) -> u32 {
