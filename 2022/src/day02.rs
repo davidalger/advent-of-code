@@ -1,5 +1,3 @@
-use utils::prelude::*;
-
 #[derive(Clone)]
 enum Play {
     Rock,
@@ -69,7 +67,7 @@ fn play(p1: Play, p2: Play) -> u32 {
     (p2 as u32 + 1) + (outcome * 3)
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 15)
     (part1, "puzzle", 9177)
     (part2, "sample", 12)

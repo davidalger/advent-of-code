@@ -1,5 +1,8 @@
+use std::cmp::Ordering::{self, Equal, Greater, Less};
+
+use itertools::EitherOrBoth::{Both, Left, Right};
+use itertools::Itertools;
 use serde_json::{from_str, json, Value};
-use utils::prelude::*;
 
 pub fn part1(input: String) -> u32 {
     let pairs = input
@@ -65,7 +68,7 @@ fn cmp(a: &Value, b: &Value) -> Ordering {
     }
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 13)
     (part1, "puzzle", 5905)
     (part2, "sample", 140)

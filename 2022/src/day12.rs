@@ -1,4 +1,4 @@
-use utils::prelude::*;
+use std::collections::{HashMap, VecDeque};
 
 pub struct Input {
     grid: Grid,
@@ -63,10 +63,10 @@ fn search(grid: &Grid, start: Pos, success: &dyn Fn(&Pos) -> bool) -> usize {
             break;
         }
         for next in successors(grid, &node) {
-            if let Vacant(e) = v.entry(next) {
-                e.insert(Some(node));
+            v.entry(next).or_insert_with(|| {
                 q.push_back(next);
-            }
+                Some(node)
+            });
         }
     }
     p.len() - 1
@@ -86,7 +86,7 @@ fn successors(grid: &Grid, p: &Pos) -> Vec<Pos> {
         .collect()
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 31)
     (part1, "puzzle", 423)
     (part2, "sample", 29)

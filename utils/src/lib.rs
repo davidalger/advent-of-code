@@ -1,7 +1,7 @@
-pub mod prelude;
-pub use clap::Parser;
+pub use log::debug;
 pub use paste::paste;
 
+use clap::Parser;
 use env_logger;
 
 pub fn init() {
@@ -22,26 +22,38 @@ pub struct Args {
     pub part2: bool,
 }
 
-pub fn input_from_file(path: &str) -> String {
-    std::fs::read_to_string(path)
-        .unwrap_or_else(|err| panic!("Unable to read file '{}': {}", path, err))
+impl Args {
+    pub fn parse() -> Self {
+        Parser::parse()
+    }
+
+    pub fn name(&self) -> String {
+        if let Ok(day) = sscanf::sscanf!(self.day, "{char}{str}{u32}") {
+            format!("{}{} {}", day.0.to_uppercase(), day.1, day.2)
+        } else {
+            self.day.to_uppercase()
+        }
+    }
+}
+
+pub fn read_input(day: &str, input: &str) -> String {
+    let path = format!("input/{day}-{input}.txt");
+    std::fs::read_to_string(&path)
+        .unwrap_or_else(|err| panic!("Unable to read file '{path}': {err}"))
 }
 
 #[macro_export]
 macro_rules! runner {
     ( $($p:ident), *$(,)? ) => {
         $(pub mod $p;)*
-        use $crate::*;
         pub fn runner() {
             $crate::init();
             let args = $crate::Args::parse();
 
-            let name = if let Ok(day) = sscanf::sscanf!(args.day, "{char}{str}{u32}") {
-                format!("{}{} {}", day.0.to_uppercase(), day.1, day.2)
-            } else {
-                args.day.to_uppercase()
-            };
-            println!("\n🎄 Advent of Code {} {} 🎄\n", module_path!().split('_').last().unwrap(), name);
+            let year = module_path!().split('_').last().unwrap();
+            let name = args.name();
+
+            println!("\n🎄 Advent of Code {year} {name} 🎄\n");
 
             let part1 = match args.day.as_str() {
                 $(stringify!($p) => |input: String| { $p::part1(input.into()).to_string() },)*
@@ -53,16 +65,17 @@ macro_rules! runner {
                 day => unimplemented!("{}", day),
             };
 
-            let input = input_from_file(&format!("input/{}-{}.txt", args.day, args.input));
-            for (p, (f, b)) in [
-                (part1, args.part1 || !args.part1 ^ args.part2),
-                (part2, args.part2 || !args.part1 ^ args.part2),
-            ].iter().enumerate() {
-                if *b {
+            let input = $crate::read_input(&args.day, &args.input);
+
+            for (part, func, enabled) in [
+                (1, part1, args.part1 || !args.part1 ^ args.part2),
+                (2, part2, args.part2 || !args.part1 ^ args.part2),
+            ] {
+                if enabled {
                     let start = std::time::SystemTime::now();
-                    let result = f(input.clone());
+                    let result = func(input.clone());
                     let duration = std::time::SystemTime::now().duration_since(start).unwrap();
-                    println!("-- Part {} ({:?}) ---\n\n{}\n", p + 1, duration, result);
+                    println!("-- Part {part} ({duration:?}) ---\n\n{result}\n");
                 }
             }
         }
@@ -82,7 +95,7 @@ macro_rules! benches {
 
                     group.bench_with_input(
                         criterion::BenchmarkId::new(stringify!($part), $input),
-                        &$crate::input_from_file(&format!("input/{}-{}.txt", stringify!($day), $input)),
+                        &$crate::read_input(stringify!($day), $input),
                         |b, i| b.iter(|| $day::$part(criterion::black_box(i.clone().into()))),
                     );
                     group.finish();
@@ -100,10 +113,10 @@ macro_rules! benches {
 #[macro_export]
 macro_rules! parse {
     (|$i:ident| -> $t:ty $p:block) => {
-        parse!(|$i| -> $t $p as Input);
+        $crate::parse!(|$i| -> $t $p as Input);
     };
     (|$i:ident| -> $t:ty $p:block as $s:tt) => {
-        parse!(|$i| -> $t $p as $s with derive());
+        $crate::parse!(|$i| -> $t $p as $s with derive());
     };
     (|$i:ident| -> $t:ty $p:block as $s:tt with derive($($d:tt), *)) => {
         #[derive($($d,)*)]
@@ -134,12 +147,7 @@ macro_rules! parse {
 #[macro_export]
 macro_rules! input {
     ($x:expr) => {
-        $crate::input_from_file(&format!(
-            "input/{}-{}.txt",
-            module_path!().split("::").nth(1).unwrap(),
-            $x
-        ))
-        .into()
+        $crate::read_input(module_path!().split("::").nth(1).unwrap(), $x).into()
     };
 }
 
@@ -162,7 +170,7 @@ macro_rules! test {
 macro_rules! tests {
     ( $( ($func:ident, $input:expr, $right:literal) )+ ) => {
         $crate::paste! {
-            tests! {$(
+            $crate::tests! {$(
                 [<$func _ $input>]($func($crate::input!($input)), $right)
             )+}
         }
@@ -172,7 +180,7 @@ macro_rules! tests {
         mod tests {
             use super::*;
         $(
-            test!($func($left, $right));
+            $crate::test!($func($left, $right));
         )+
         }
     };

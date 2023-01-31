@@ -1,5 +1,4 @@
-use sscanf::sscanf;
-use utils::prelude::*;
+use std::collections::VecDeque;
 
 pub struct Input {
     stacks: Vec<VecDeque<char>>,
@@ -34,7 +33,7 @@ impl From<String> for Input {
 
         let mut moves: Vec<Move> = Vec::new();
         for l in parts.next().unwrap().lines() {
-            moves.push(sscanf!(l, "{Move}").unwrap());
+            moves.push(sscanf::sscanf!(l, "{Move}").unwrap());
         }
 
         Input { stacks, moves }
@@ -73,7 +72,7 @@ fn top_crates(stacks: &Vec<VecDeque<char>>) -> String {
     top_crates.join("")
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", "CMZ")
     (part1, "puzzle", "FCVRLMVQP")
     (part2, "sample", "MCD")

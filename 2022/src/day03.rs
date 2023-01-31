@@ -1,4 +1,6 @@
-use utils::prelude::*;
+use std::collections::HashSet;
+
+use itertools::Itertools;
 
 pub fn part1(input: String) -> u32 {
     let mut score = 0;
@@ -42,7 +44,7 @@ fn priority(mut sets: Vec<HashSet<char>>) -> u32 {
     }
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 157)
     (part1, "puzzle", 7878)
     (part2, "sample", 70)

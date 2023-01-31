@@ -1,5 +1,6 @@
+use std::collections::HashMap;
+
 use sscanf::sscanf;
-use utils::prelude::*;
 
 pub enum Val {
     Unknown,
@@ -7,7 +8,7 @@ pub enum Val {
     Exp(String, char, String),
 }
 
-parse!(|i| -> HashMap<String, Val> {
+utils::parse!(|i| -> HashMap<String, Val> {
     i.lines()
         .map(|l| {
             let (a, b) = l.split_once(": ").unwrap();
@@ -75,7 +76,7 @@ fn resolve(monkey: &str, monkeys: &Monkeys) -> Option<u128> {
     }
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 152)
     (part1, "puzzle", 158731561459602)
     (part2, "sample", 301)

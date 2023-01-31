@@ -1,6 +1,6 @@
-use utils::prelude::*;
+use std::collections::HashSet;
 
-parse!(|i| -> Vec<[HashSet<u32>; 2]> {
+utils::parse!(|i| -> Vec<[HashSet<u32>; 2]> {
     i.lines()
         .map(|l| {
             l.splitn(2, ',')
@@ -36,7 +36,7 @@ pub fn part2(input: Input) -> u32 {
     score
 }
 
-tests! {
+utils::tests! {
     (part1, "puzzle", 562)
     (part1, "sample", 2)
     (part2, "sample", 4)

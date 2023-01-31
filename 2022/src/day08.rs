@@ -1,6 +1,4 @@
-use utils::prelude::*;
-
-parse!(|i| -> Vec<Vec<u32>> {
+utils::parse!(|i| -> Vec<Vec<u32>> {
     i.lines().map(|l| l.bytes().map(|c| c as u32 + 1 - '1' as u32).collect()).collect()
 } as Grid);
 
@@ -103,7 +101,7 @@ fn scenic_score(grid: &Grid, x: usize, y: usize) -> u32 {
     left * right * up * down
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 21)
     (part1, "puzzle", 1703)
     (part2, "sample", 8)

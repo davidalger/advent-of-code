@@ -7,7 +7,6 @@ name = "advent-of-code-2021"
 version = "0.1.0"
 dependencies = [
  "criterion",
- "sscanf",
  "utils",
 ]
 
@@ -17,6 +16,7 @@ version = "0.1.0"
 dependencies = [
  "criterion",
  "gif",
+ "itertools",
  "rustc-hash",
  "serde_json",
  "sscanf",
@@ -781,9 +781,9 @@ version = "0.1.0"
 dependencies = [
  "clap 4.0.32",
  "env_logger",
- "itertools",
  "log",
  "paste",
+ "sscanf",
 ]
 
 [[package]]
