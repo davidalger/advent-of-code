@@ -1,8 +1,7 @@
-use sscanf::sscanf;
-use utils::prelude::*;
+use std::{cmp::Ordering, collections::HashSet};
 
-parse!(|i| -> Vec<(char, u32)> {
-    i.lines().map(|l| sscanf!(l, "{char} {u32}").unwrap()).collect()
+utils::parse!(|i| -> Vec<(char, u32)> {
+    i.lines().map(|l| sscanf::sscanf!(l, "{char} {u32}").unwrap()).collect()
 } as Moves);
 
 #[derive(Clone, Copy, Hash, PartialEq, Eq, Debug)]
@@ -74,7 +73,7 @@ fn track_y(leader: Coordinate, follower: &mut Coordinate, y: i32) {
     }
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 13)
     (part1, "puzzle", 6284)
     (part2, "sample", 1)

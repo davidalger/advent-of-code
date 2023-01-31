@@ -1,5 +1,3 @@
-use utils::prelude::*;
-
 pub enum Instruction {
     Noop,
     Addx(i32),
@@ -10,7 +8,7 @@ struct Result {
     crt: String,
 }
 
-parse!(|i| -> Vec<Instruction> {
+utils::parse!(|i| -> Vec<Instruction> {
     i.lines()
         .map(|l| match l.split_once(' ') {
             Some(l) => Instruction::Addx(l.1.parse().unwrap()),
@@ -75,6 +73,7 @@ fn draw(c: i32, x: i32) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use utils::{test, input};
 
     test!(part1, "sample", 13140);
     test!(part1, "puzzle", 14560);

@@ -1,6 +1,6 @@
-use utils::prelude::*;
+use itertools::Itertools;
 
-parse!(|i| -> Vec<u32> {
+utils::parse!(|i| -> Vec<u32> {
     i.split("\n\n")
         .map(|chunk| chunk.lines().fold(0, |a, b| a + b.parse::<u32>().unwrap()))
         .sorted()
@@ -16,7 +16,7 @@ pub fn part2(input: Input) -> u32 {
     input[0..3].iter().sum()
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 24000)
     (part1, "puzzle", 67027)
     (part2, "sample", 45000)

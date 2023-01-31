@@ -1,5 +1,5 @@
+use itertools::Itertools;
 use sscanf::sscanf;
-use utils::prelude::*;
 
 pub struct Input {
     part1_row: i32,
@@ -88,7 +88,7 @@ fn distance(a: Pos, b: Pos) -> u32 {
     a.0.abs_diff(b.0) + a.1.abs_diff(b.1)
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 26)
     (part1, "puzzle", 5511201)
     (part2, "sample", 56000011)

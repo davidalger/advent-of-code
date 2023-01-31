@@ -1,4 +1,4 @@
-use utils::prelude::*;
+use std::collections::HashSet;
 
 pub fn part1(input: String) -> usize {
     marker(&input, 4)
@@ -17,7 +17,7 @@ fn marker(input: &str, len: usize) -> usize {
     0
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 7)
     (part1, "puzzle", 1912)
     (part2, "sample", 19)

@@ -1,5 +1,7 @@
+use std::collections::VecDeque;
+
+use itertools::Itertools;
 use sscanf::sscanf;
-use utils::prelude::*;
 
 pub struct Monkey {
     items: VecDeque<u128>,
@@ -18,7 +20,7 @@ pub struct Test {
     monkey: (usize, usize),
 }
 
-parse!(|i| -> Vec<Monkey> {
+utils::parse!(|i| -> Vec<Monkey> {
     i.split("\n\n")
         .map(|chunk| {
             let lines = chunk.lines().map(|l| l.trim()).collect_vec();
@@ -72,8 +74,8 @@ fn mitm(mut monkeys: Monkeys, rounds: u32, divisor: Option<u128>) -> u128 {
 
                 item = match monkey.operation {
                     Operation::Pow(v) => item.pow(v),
-                    Operation::Add(v) => item.add(v),
-                    Operation::Mul(v) => item.mul(v),
+                    Operation::Add(v) => item + v,
+                    Operation::Mul(v) => item * v,
                 };
 
                 if let Some(divisor) = divisor {
@@ -95,7 +97,7 @@ fn mitm(mut monkeys: Monkeys, rounds: u32, divisor: Option<u128>) -> u128 {
     counter.pop().unwrap() * counter.pop().unwrap()
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 10605)
     (part1, "puzzle", 99840)
     (part2, "sample", 2713310158)

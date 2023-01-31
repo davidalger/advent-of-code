@@ -1,6 +1,5 @@
-use utils::prelude::*;
-
 use gif::{Encoder, Frame, Repeat};
+use itertools::Itertools;
 use std::borrow::Cow;
 use std::fs::File;
 
@@ -228,7 +227,7 @@ fn frame_buffer(grid: &Grid, width: u16, height: u16, scale: u16) -> Vec<u8> {
     data
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 24)
     (part1, "puzzle", 799)
     (part2, "sample", 93)

@@ -1,6 +1,4 @@
-use utils::prelude::*;
-
-parse!(|i| -> Vec<u32> { i.lines().map(|l| l.parse().unwrap()).collect() });
+utils::parse!(|i| -> Vec<u32> { i.lines().map(|l| l.parse().unwrap()).collect() });
 
 pub fn part1(input: Input) -> u32 {
     let mut score = 0;
@@ -23,7 +21,7 @@ pub fn part2(input: Input) -> u32 {
     score
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 7)
     (part1, "puzzle", 1301)
     (part2, "sample", 5)

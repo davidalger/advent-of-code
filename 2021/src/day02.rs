@@ -1,14 +1,16 @@
-use sscanf::sscanf;
-use utils::prelude::*;
-
-#[derive(sscanf::FromScanf)]
-#[sscanf("{direction} {units}")]
 pub struct Move {
     direction: String,
     units: u32,
 }
 
-parse!(|i| -> Vec<Move> { i.lines().map(|l| sscanf!(l, "{Move}").unwrap()).collect() } as Moves);
+utils::parse!(|i| -> Vec<Move> {
+    i.lines()
+        .map(|l| {
+            let (direction, units) = l.split_once(' ').unwrap();
+            Move { direction: direction.to_string(), units: units.parse().unwrap() }
+        })
+        .collect()
+} as Moves);
 
 pub fn part1(moves: Moves) -> u32 {
     let mut x = 0;
@@ -42,7 +44,7 @@ pub fn part2(moves: Moves) -> u32 {
     x * z
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 150)
     (part1, "puzzle", 1804520)
     (part2, "sample", 900)

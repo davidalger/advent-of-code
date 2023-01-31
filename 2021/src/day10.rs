@@ -1,4 +1,4 @@
-use utils::prelude::*;
+use std::{collections::HashMap, str::Chars};
 
 pub fn part1(input: String) -> u64 {
     let mut score = 0;
@@ -102,7 +102,7 @@ fn get_matching(t: char) -> char {
     *HashMap::from([('(', ')'), ('[', ']'), ('{', '}'), ('<', '>')]).get(&t).unwrap()
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 26397)
     (part1, "extra-close", 1197)
     (part1, "invalid-open", 26400)

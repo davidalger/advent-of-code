@@ -1,6 +1,7 @@
+use itertools::Itertools;
 use rustc_hash::{FxHashMap, FxHashSet};
 use sscanf::sscanf;
-use utils::prelude::*;
+use utils::debug;
 
 #[derive(Clone)]
 pub struct Valve {
@@ -10,7 +11,7 @@ pub struct Valve {
 type Visited = FxHashMap<(usize, u32, BitSet), u32>;
 type BitSet = u64; // 1-bit per valve
 
-parse!(|i| -> Vec<Valve> {
+utils::parse!(|i| -> Vec<Valve> {
     let start = std::time::SystemTime::now();
 
     let ids: FxHashMap<&str, usize> = i
@@ -133,7 +134,7 @@ fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
     combinations
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 1651)
     (part1, "puzzle", 2029)
     (part2, "sample", 1707)

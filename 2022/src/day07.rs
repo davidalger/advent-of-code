@@ -1,7 +1,9 @@
-use sscanf::sscanf;
-use utils::prelude::*;
+use std::collections::HashMap;
 
-parse!(|i| -> HashMap<String, u32> {
+use itertools::Itertools;
+use sscanf::sscanf;
+
+utils::parse!(|i| -> HashMap<String, u32> {
     let mut cwd = Vec::new();
     let mut sizes = HashMap::new();
     for l in i.lines() {
@@ -40,7 +42,7 @@ pub fn part2(sizes: Sizes) -> u32 {
     sizes.iter().map(|(_, size)| *size).filter(|size| need <= *size).sorted().next().unwrap()
 }
 
-tests! {
+utils::tests! {
     (part1, "sample", 95437)
     (part1, "puzzle", 1513699)
     (part2, "sample", 24933642)

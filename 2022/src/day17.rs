@@ -1,6 +1,6 @@
-use utils::prelude::*;
+use itertools::Itertools;
 
-parse!(|i| -> Vec<Jet> {
+utils::parse!(|i| -> Vec<Jet> {
     i.lines()
         .next()
         .unwrap()
@@ -264,6 +264,7 @@ fn render(grid: &[u8]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use utils::{input, test};
 
     test!(part1, "sample", 3068);
     test!(part1, "puzzle", 3161);
