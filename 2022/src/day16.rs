@@ -70,23 +70,23 @@ fn traverse(id: usize, valves: &Valves, opened: BitSet, visited: &mut Visited, s
         return 0;
     }
 
-    let mut value = 0;
-    if valves[id].rate > 0 && (opened & (1 << id)) == 0 {
-        value = valves[id].rate * (steps - 1)
-            + traverse(id, valves, opened | 1 << id, visited, steps - 1);
-    }
-
-    for id in &valves[id].edges {
-        let hash = (*id, steps, opened);
-        if !visited.contains_key(&hash) {
-            let v = traverse(*id, valves, opened, visited, steps - 1);
-            visited.insert(hash, v);
-            value = value.max(v);
-        } else {
-            value = value.max(*visited.get(&hash).unwrap());
+    let hash = (id, steps, opened);
+    if let Some(value) = visited.get(&hash) {
+        *value
+    } else {
+        let mut value = 0;
+        if valves[id].rate > 0 && (opened & (1 << id)) == 0 {
+            value = valves[id].rate * (steps - 1)
+                + traverse(id, valves, opened | 1 << id, visited, steps - 1);
         }
+
+        for id in &valves[id].edges {
+            value = value.max(traverse(*id, valves, opened, visited, steps - 1));
+        }
+
+        visited.insert(hash, value);
+        value
     }
-    value
 }
 
 fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
