@@ -80,9 +80,14 @@ fn traverse(id: usize, valves: &Valves, opened: BitSet, visited: &mut Visited, s
                 + traverse(id, valves, opened | 1 << id, visited, steps - 1);
         }
 
-        for id in &valves[id].edges {
-            value = value.max(traverse(*id, valves, opened, visited, steps - 1));
-        }
+        value = value.max(
+            valves[id]
+                .edges
+                .iter()
+                .map(|id| traverse(*id, valves, opened, visited, steps - 1))
+                .max()
+                .unwrap(),
+        );
 
         visited.insert(hash, value);
         value
