@@ -101,35 +101,35 @@ fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
     let combinations = valves
         .iter()
         .enumerate()
-        .filter(|(_, v)| v.rate > 0)
-        .map(|(id, _)| id)
+        .filter_map(|(id, v)| if v.rate > 0 { Some(id) } else { None })
         .combinations(valves.iter().enumerate().filter(|(_, v)| v.rate > 0).count() / 2)
-        .map(|s| {
+        .filter_map(|s| {
             let a = s.iter().cloned().collect::<FxHashSet<_>>();
-            let b = ids.difference(&a).cloned().collect::<FxHashSet<_>>();
-            (a, b)
-        })
-        .filter(|(a, _)| a.iter().map(|&id| valves[id].rate >= 20).filter(|&t| t).count() == 1)
-        .map(|(a, b)| {
-            [a, b]
-                .iter()
-                .map(|s| {
-                    Valves(
-                        valves
-                            .iter()
-                            .enumerate()
-                            .map(|(id, v)| {
-                                if s.contains(&id) {
-                                    v.clone()
-                                } else {
-                                    Valve { rate: 0, ..v.clone() }
-                                }
-                            })
-                            .collect(),
-                    )
-                })
-                .collect_tuple()
-                .unwrap()
+            if a.iter().map(|&id| valves[id].rate >= 20).filter(|&t| t).count() == 1 {
+                let b = ids.difference(&a).cloned().collect::<FxHashSet<_>>();
+                let p = [a, b]
+                    .iter()
+                    .map(|s| {
+                        Valves(
+                            valves
+                                .iter()
+                                .enumerate()
+                                .map(|(id, v)| {
+                                    if s.contains(&id) {
+                                        v.clone()
+                                    } else {
+                                        Valve { rate: 0, ..v.clone() }
+                                    }
+                                })
+                                .collect(),
+                        )
+                    })
+                    .collect_tuple()
+                    .unwrap();
+                Some(p)
+            } else {
+                None
+            }
         })
         .collect_vec();
 
