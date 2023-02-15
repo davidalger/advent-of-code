@@ -11,6 +11,8 @@ type Visited = FxHashMap<(usize, u32, BitSet), u32>;
 type BitSet = u64; // 1-bit per valve
 
 parse!(|i| -> Vec<Valve> {
+    let start = std::time::SystemTime::now();
+
     let ids: FxHashMap<&str, usize> = i
         .lines()
         .sorted() // 'AA' will be index 0
@@ -32,6 +34,9 @@ parse!(|i| -> Vec<Valve> {
     if valves.len() as u32 > BitSet::BITS {
         panic!("Too many valves for BitSet");
     }
+
+    let duration = std::time::SystemTime::now().duration_since(start).unwrap();
+    debug!("Parsing {} valves took {duration:?}", valves.len());
 
     valves
 } as Valves);
@@ -76,8 +81,10 @@ fn traverse(id: usize, valves: &Valves, opened: BitSet, visited: &mut Visited, s
 }
 
 fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
+    let start = std::time::SystemTime::now();
+
     let ids: FxHashSet<_> = (0..valves.len()).collect();
-    let ids = valves
+    let combinations = valves
         .iter()
         .enumerate()
         .filter(|(_, v)| v.rate > 0)
@@ -88,9 +95,6 @@ fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
             let b = ids.difference(&a).cloned().collect::<FxHashSet<_>>();
             (a, b)
         })
-        .collect_vec();
-
-    ids.iter()
         .filter(|(a, _)| a.iter().map(|&id| valves[id].rate >= 20).filter(|&t| t).count() == 1)
         .map(|(a, b)| {
             [a, b]
@@ -113,7 +117,12 @@ fn combinations(valves: &Valves) -> Vec<(Valves, Valves)> {
                 .collect_tuple()
                 .unwrap()
         })
-        .collect()
+        .collect_vec();
+
+    let duration = std::time::SystemTime::now().duration_since(start).unwrap();
+    debug!("Calculating {} combinations took {duration:?}", combinations.len());
+
+    combinations
 }
 
 tests! {

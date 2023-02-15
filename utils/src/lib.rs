@@ -2,6 +2,12 @@ pub mod prelude;
 pub use clap::Parser;
 pub use paste::paste;
 
+use env_logger;
+
+pub fn init() {
+    env_logger::init();
+}
+
 #[derive(Parser, Default)]
 pub struct Args {
     pub day: String,
@@ -27,7 +33,8 @@ macro_rules! runner {
         $(pub mod $p;)*
         use $crate::*;
         pub fn runner() {
-            let args = Args::parse();
+            $crate::init();
+            let args = $crate::Args::parse();
 
             let name = if let Ok(day) = sscanf::sscanf!(args.day, "{char}{str}{u32}") {
                 format!("{}{} {}", day.0.to_uppercase(), day.1, day.2)
