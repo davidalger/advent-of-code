@@ -55,12 +55,12 @@ macro_rules! runner {
 
             println!("\n🎄 Advent of Code {year} {name} 🎄\n");
 
-            let part1 = match args.day.as_str() {
+            let part1: fn(String) -> String = match args.day.as_str() {
                 $(stringify!($p) => |input: String| { $p::part1(input.into()).to_string() },)*
                 day => unimplemented!("{}", day),
             };
 
-            let part2 = match args.day.as_str() {
+            let part2: fn(String) -> String = match args.day.as_str() {
                 $(stringify!($p) => |input: String| { $p::part2(input.into()).to_string() },)*
                 day => unimplemented!("{}", day),
             };

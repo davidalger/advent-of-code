@@ -24,6 +24,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "advent-of-code-2023"
+version = "0.1.0"
+dependencies = [
+ "criterion",
+ "sscanf",
+ "utils",
+]
+
+[[package]]
 name = "aho-corasick"
 version = "0.7.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"

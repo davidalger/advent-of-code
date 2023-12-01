@@ -1,0 +1,3 @@
+utils::runner!(
+  day01
+);
