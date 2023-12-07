@@ -6,11 +6,10 @@ set -euo pipefail
 : ${1:?"Need to set day non-empty"}
 
 YEAR=2023
-DAY=$(printf "%02d" $1)
+DAY=$1
 
-
-if [ ! -f src/day${DAY}.rs ]; then
-    cat > src/day${DAY}.rs <<-EOT
+if [ ! -f src/${DAY}.rs ]; then
+    cat > src/${DAY}.rs <<-EOT
 pub fn part1(input: String) -> u32 {
     input.len() as u32
 }
@@ -28,12 +27,12 @@ utils::tests! {
 EOT
 fi
 
-if ! grep day${DAY} src/lib.rs >/dev/null; then
-    perl -i -pe "s#^\)\;#  day${DAY},\n);#" src/lib.rs
+if ! grep ${DAY} src/lib.rs >/dev/null; then
+    perl -i -pe "s#^\)\;#  ${DAY},\n);#" src/lib.rs
 fi
 
-if ! grep day${DAY} benches/lib.rs >/dev/null; then
-    perl -i -pe "s#^\]\;#    (day${DAY}::part1, \"puzzle\"),\n    (day${DAY}::part2, \"puzzle\"),\n];#" benches/lib.rs
+if ! grep ${DAY} benches/lib.rs >/dev/null; then
+    perl -i -pe "s#^\]\;#    (${DAY}::part1, \"puzzle\"),\n    (${DAY}::part2, \"puzzle\"),\n];#" benches/lib.rs
 fi
 
-touch input/day${DAY}-{sample,puzzle}.txt
+touch input/${DAY}-{sample,puzzle}.txt
