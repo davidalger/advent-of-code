@@ -8,4 +8,5 @@ utils::runner!(
   day07,
   day08,
   day09,
+  day10,
 );
