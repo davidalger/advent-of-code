@@ -16,8 +16,8 @@ pub fn part2(input: String) -> u64 {
         .net
         .iter()
         .filter_map(|(k, _)| {
-            if k.ends_with("A") {
-                Some(solve(&input, k, |next| next.ends_with("Z")))
+            if k.ends_with('A') {
+                Some(solve(&input, k, |next| next.ends_with('Z')))
             } else {
                 None
             }
@@ -26,7 +26,7 @@ pub fn part2(input: String) -> u64 {
         .unwrap()
 }
 
-fn parse<'a>(input: &'a String) -> Input<'a> {
+fn parse(input: &str) -> Input {
     let (ins, net) = input.split_once("\n\n").unwrap();
     let ins = ins.bytes().collect();
     let net = net
@@ -54,7 +54,7 @@ where
             b'R' => r,
             _ => unimplemented!(),
         };
-        if condition(&next) {
+        if condition(next) {
             return steps;
         }
         (l, r) = *input.net.get(&next).unwrap();

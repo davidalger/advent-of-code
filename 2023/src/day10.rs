@@ -131,7 +131,7 @@ fn collect_points(map: &Map, start: (usize, usize)) -> Vec<(usize, usize)> {
     points
 }
 
-fn render_loop(map: &Map, points: &Vec<(usize, usize)>) -> Map {
+fn render_loop(map: &Map, points: &[(usize, usize)]) -> Map {
     let points: HashSet<_> = points.iter().collect();
     let mut map = map.clone();
 

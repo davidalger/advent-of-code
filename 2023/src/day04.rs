@@ -11,7 +11,7 @@ pub fn part1(input: String) -> u32 {
 
             match w.intersection(&n).count() {
                 0 => None, // cards without any winners are worth zero
-                count => Some(1 * 2_u32.pow(count as u32 - 1)),
+                count => Some(2_u32.pow(count as u32 - 1)),
             }
         })
         .sum()

@@ -15,7 +15,7 @@ fn extrapolate(seq: &Vec<i32>) -> (i32, i32) {
     for i in 1..seq.len() {
         diff.push(seq[i] - seq[i - 1]);
     }
-    if diff.iter().map(|&x| x == 0).reduce(|l, r| l == r && l == true).unwrap() == true {
+    if diff.iter().map(|&x| x == 0).reduce(|l, r| l == r && l).unwrap() {
         (seq[0], seq[seq.len() - 1])
     } else {
         let (left, right) = extrapolate(&diff);

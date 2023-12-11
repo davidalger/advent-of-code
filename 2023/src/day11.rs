@@ -28,7 +28,7 @@ fn solve(grid: Grid, factor: usize) -> usize {
                 .filter_map(|(x, &val)| if val == '#' { Some((x, y)) } else { None })
                 .collect_vec();
 
-            if p.len() > 0 {
+            if !p.is_empty() {
                 Some(p)
             } else {
                 None

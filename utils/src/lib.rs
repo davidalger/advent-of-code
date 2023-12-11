@@ -2,7 +2,6 @@ pub use log::debug;
 pub use paste::paste;
 
 use clap::Parser;
-use env_logger;
 
 pub fn init() {
     env_logger::init();

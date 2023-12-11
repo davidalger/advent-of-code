@@ -50,7 +50,7 @@ pub fn part2(input: Input) -> u64 {
     seeds.iter().map(|s| locate(*s, &input.maps)).min().unwrap()
 }
 
-fn locate(seed: u64, maps: &Vec<Map>) -> u64 {
+fn locate(seed: u64, maps: &[Map]) -> u64 {
     let mut l = seed;
     for map in maps.iter() {
         for (d_start, s_start, length) in map {

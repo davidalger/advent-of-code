@@ -249,10 +249,7 @@ fn render(grid: &[u8]) -> String {
     let mut str = grid.iter().rev().fold(String::new(), |mut a, row| {
         a.push_str(
             &("|".to_string()
-                + &((0..WIDTH)
-                    .into_iter()
-                    .map(|x| if *row & (1 << x) != 0 { '#' } else { '.' })
-                    .join("")
+                + &((0..WIDTH).map(|x| if *row & (1 << x) != 0 { '#' } else { '.' }).join("")
                     + "|\n")),
         );
         a

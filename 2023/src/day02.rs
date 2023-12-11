@@ -10,10 +10,10 @@ utils::parse!(|i| -> Vec<(u32, Vec<Play>)> {
             let (_, id, l) = sscanf::sscanf!(l, "{str}{u32}:{str}").unwrap();
             (
                 id,
-                l.split(";")
+                l.split(';')
                     .map(|p| {
                         let mut play = Play { r: 0, g: 0, b: 0 };
-                        for t in p.split(",") {
+                        for t in p.split(',') {
                             let (n, c) = sscanf::sscanf!(t.trim(), "{u32} {str}").unwrap();
                             match c {
                                 "red" => play.r = n,

@@ -68,8 +68,8 @@ fn play(input: String, joker_rule: bool) -> u32 {
 
             (h, t, b.parse().unwrap())
         })
-        .sorted_by(|(hand_a, type_a, _), (hand_b, type_b, _)| match type_a.cmp(&type_b) {
-            Ordering::Equal => hand_a.cmp(&hand_b),
+        .sorted_by(|(hand_a, type_a, _), (hand_b, type_b, _)| match type_a.cmp(type_b) {
+            Ordering::Equal => hand_a.cmp(hand_b),
             ordering => ordering,
         })
         .enumerate()
