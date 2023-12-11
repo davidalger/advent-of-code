@@ -11,11 +11,11 @@ DAY=$1
 if [ ! -f src/${DAY}.rs ]; then
     cat > src/${DAY}.rs <<-EOT
 pub fn part1(input: String) -> u32 {
-    input.len() as u32
+    todo!()
 }
 
 pub fn part2(input: String) -> u32 {
-    input.len() as u32
+    todo!()
 }
 
 utils::tests! {

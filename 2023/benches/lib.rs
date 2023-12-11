@@ -21,4 +21,6 @@ utils::benches![
     (day09::part2, "puzzle"),
     (day10::part1, "puzzle"),
     (day10::part2, "puzzle"),
+    (day11::part1, "puzzle"),
+    (day11::part2, "puzzle"),
 ];
