@@ -1,15 +1,29 @@
-use std::collections::{hash_map::RandomState, HashSet};
+use std::collections::HashSet;
 
 utils::parse!(|i| -> Vec<Vec<char>> { i.lines().map(|l| l.chars().collect()).collect() } as Map with derive(Clone));
 
 pub fn part1(map: Map) -> usize {
-    let points = collect_points(&map);
-    render_loop(&map, &points);
-    points.len() / 2
+    collect_points(&map, locate_start(&map)).len() / 2
 }
 
-pub fn part2(_map: Map) -> usize {
-    todo!()
+pub fn part2(map: Map) -> usize {
+    let mut map = render_loop(&map, &collect_points(&map, locate_start(&map)));
+    let mut tiles = 0;
+
+    for y in 0..map.len() {
+        for x in 0..map[y].len() {
+            if map[y][x] == '.' {
+                if trace_point(&map, (x, y)).abs() % 2.0 == 1.0 {
+                    tiles += 1;
+                    map[y][x] = 'I';
+                } else {
+                    map[y][x] = 'O';
+                }
+            }
+        }
+    }
+
+    tiles
 }
 
 fn locate_start(map: &Map) -> (usize, usize) {
@@ -23,8 +37,7 @@ fn locate_start(map: &Map) -> (usize, usize) {
     panic!("failed to locate starting point")
 }
 
-fn collect_points(map: &Map) -> Vec<(usize, usize)> {
-    let start = locate_start(&map);
+fn collect_points(map: &Map, start: (usize, usize)) -> Vec<(usize, usize)> {
     let mut points = vec![];
 
     let (mut x, mut y) = start;
@@ -119,19 +132,62 @@ fn collect_points(map: &Map) -> Vec<(usize, usize)> {
 }
 
 fn render_loop(map: &Map, points: &Vec<(usize, usize)>) -> Map {
-    let points: HashSet<(usize, usize), RandomState> = HashSet::from_iter(points.iter().cloned());
+    let points: HashSet<_> = points.iter().collect();
     let mut map = map.clone();
 
     for y in 0..map.len() {
         for x in 0..map[y].len() {
-            map[y][x] = if points.contains(&(x, y)) { map[y][x] } else { '.' };
-            print!("{}", map[y][x]);
+            if !points.contains(&(x, y)) {
+                map[y][x] = '.'
+            } else if map[y][x] == 'S' {
+                // replace S with tile indicating pipe direction
+
+                if y > 0 && matches!(map[y - 1][x], '|' | 'F' | '7') {
+                    // valid pipe north
+
+                    if x > 0 && matches!(map[y][x - 1], '-' | 'F' | 'L') {
+                        // valid pipe west
+                        map[y][x] = 'J';
+                    } else if x + 1 < map[y].len() - 1 && matches!(map[y][x + 1], '-' | '7' | 'J') {
+                        // valid pipe east
+                        map[y][x] = 'L';
+                    } else if y + 1 < map.len() - 1 && matches!(map[y + 1][x], '|' | 'L' | 'J') {
+                        // valid pipe south
+                        map[y][x] = '|';
+                    }
+                } else if y + 1 < map.len() - 1 && matches!(map[y + 1][x], '|' | 'L' | 'J') {
+                    // valid pipe south
+
+                    if x > 0 && matches!(map[y][x - 1], '-' | 'F' | 'L') {
+                        // valid pipe west
+                        map[y][x] = '7';
+                    } else if x + 1 < map[y].len() - 1 && matches!(map[y][x + 1], '-' | '7' | 'J') {
+                        // valid pipe east
+                        map[y][x] = 'F';
+                    }
+                }
+            }
         }
-        println!()
     }
-    println!();
 
     map
+}
+
+fn trace_point(map: &Map, point: (usize, usize)) -> f64 {
+    let mut result = 0.0;
+    let (mut x, y) = point;
+
+    while x < map[y].len() {
+        result += match map[y][x] {
+            '|' => 1.0,
+            'J' | 'F' => -0.5,
+            'L' | '7' => 0.5,
+            _ => 0.0,
+        };
+        x += 1;
+    }
+
+    result
 }
 
 utils::tests! {
@@ -140,9 +196,9 @@ utils::tests! {
     (part1, "sample3", 70)
     (part1, "sample4", 80)
     (part1, "puzzle", 6870)
-    // (part2, "sample1", 1)
-    // (part2, "sample2", 4)
-    // (part2, "sample3", 8)
-    // (part2, "sample4", 10)
-    // (part2, "puzzle", 0)
+    (part2, "sample1", 1)
+    (part2, "sample2", 4)
+    (part2, "sample3", 8)
+    (part2, "sample4", 10)
+    (part2, "puzzle", 287)
 }
