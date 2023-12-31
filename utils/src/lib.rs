@@ -144,6 +144,27 @@ macro_rules! parse {
 }
 
 #[macro_export]
+macro_rules! parse_as_grid {
+    ($t:tt) => {
+        $crate::parse_as_grid!($t with derive());
+    };
+    (u8 with derive($($d:tt), *)) => {
+        $crate::parse!(
+            |i| -> Vec<Vec<u8>> { i.lines().map(|l| l.as_bytes().to_vec()).collect() } as Grid
+        );
+
+        impl std::fmt::Display for Grid {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                for each in self.iter() {
+                    write!(f, "{}\n", String::from_utf8(each.clone()).unwrap())?;
+                }
+                Ok(())
+            }
+        }
+    };
+}
+
+#[macro_export]
 macro_rules! input {
     ($x:expr) => {
         $crate::read_input(module_path!().split("::").nth(1).unwrap(), $x).into()
