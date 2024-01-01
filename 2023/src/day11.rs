@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-utils::parse!(|i| -> Vec<Vec<char>> { i.lines().map(|l| l.chars().collect()).collect() } as Grid);
+utils::parse_grid!(char);
 
 pub fn part1(grid: Grid) -> usize {
     solve(grid, 2)
