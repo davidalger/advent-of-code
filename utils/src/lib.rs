@@ -51,7 +51,7 @@ pub fn read_input(year: &str, day: &str, input: &str) -> String {
         base_dir.pop();
     }
 
-    let path = base_dir.join(std::path::Path::new(&format!("{year}/input/{day}-{input}.txt")));
+    let path = base_dir.join(std::path::Path::new(&format!("input/{year}/{day}-{input}.txt")));
     std::fs::read_to_string(&path)
         .unwrap_or_else(|err| panic!("Unable to read file '{}': {err}", path.display()))
 }
