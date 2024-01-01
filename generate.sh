@@ -1,15 +1,16 @@
 #!/bin/bash
 set -euo pipefail
 
-# Usage: ./generate.sh <day>
+# Usage: ./generate.sh <year> <day>
 
-: ${1:?"Need to set day non-empty"}
+: ${1:?"Need to set year non-empty"}
+: ${2:?"Need to set day non-empty"}
 
-YEAR=2023
-DAY=$1
+YEAR=$1
+DAY=$2
 
-if [ ! -f src/${DAY}.rs ]; then
-    cat > src/${DAY}.rs <<-EOT
+if [ ! -f ${YEAR}/src/${DAY}.rs ]; then
+    cat > ${YEAR}/src/${DAY}.rs <<-EOT
 pub fn part1(input: String) -> u32 {
     todo!()
 }
@@ -27,12 +28,12 @@ utils::tests! {
 EOT
 fi
 
-if ! grep ${DAY} src/lib.rs >/dev/null; then
-    perl -i -pe "s#^\)\;#  ${DAY},\n);#" src/lib.rs
+if ! grep ${DAY} ${YEAR}/src/lib.rs >/dev/null; then
+    perl -i -pe "s#^\)\;#  ${DAY},\n);#" ${YEAR}/src/lib.rs
 fi
 
-if ! grep ${DAY} benches/lib.rs >/dev/null; then
-    perl -i -pe "s#^\]\;#    (${DAY}::part1, \"puzzle\"),\n    (${DAY}::part2, \"puzzle\"),\n];#" benches/lib.rs
+if ! grep ${DAY} ${YEAR}/benches/lib.rs >/dev/null; then
+    perl -i -pe "s#^\]\;#    (${DAY}::part1, \"puzzle\"),\n    (${DAY}::part2, \"puzzle\"),\n];#" ${YEAR}/benches/lib.rs
 fi
 
-touch input/${DAY}-{sample,puzzle}.txt
+touch input/${YEAR}/${DAY}-{sample,puzzle}.txt
