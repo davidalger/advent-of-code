@@ -8,7 +8,7 @@ struct Edge {
 type Id = (usize, usize);
 type Graph = FxHashMap<Id, Vec<Edge>>;
 
-utils::parse_as_grid!(u8);
+utils::parse_grid!(u8);
 
 pub fn part1(grid: Grid) -> u32 {
     longest_path(

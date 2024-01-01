@@ -159,19 +159,36 @@ macro_rules! parse {
 }
 
 #[macro_export]
-macro_rules! parse_as_grid {
+macro_rules! parse_grid {
     ($t:tt) => {
-        $crate::parse_as_grid!($t with derive());
+        $crate::parse_grid!($t as Grid);
     };
-    (u8 with derive($($d:tt), *)) => {
-        $crate::parse!(
-            |i| -> Vec<Vec<u8>> { i.lines().map(|l| l.as_bytes().to_vec()).collect() } as Grid
-        );
+    ($t:tt as $s:tt) => {
+        $crate::parse_grid!($t as $s with derive());
+    };
+    (u8 as $s:tt with derive($($d:tt), *)) => {
+        $crate::parse!(|i| -> Vec<Vec<u8>> {
+            i.lines().map(|l| l.as_bytes().to_vec()).collect()
+        } as $s with derive($($d), *));
 
-        impl std::fmt::Display for Grid {
+        impl std::fmt::Display for $s {
             fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
                 for each in self.iter() {
                     write!(f, "{}\n", String::from_utf8(each.clone()).unwrap())?;
+                }
+                Ok(())
+            }
+        }
+    };
+    (char as $s:tt with derive($($d:tt), *)) => {
+        $crate::parse!(|i| -> Vec<Vec<char>> {
+            i.lines().map(|l| l.chars().collect()).collect()
+        } as $s with derive($($d), *));
+
+        impl std::fmt::Display for $s {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                for each in self.iter() {
+                    write!(f, "{}\n", each.clone().iter().collect::<String>())?;
                 }
                 Ok(())
             }

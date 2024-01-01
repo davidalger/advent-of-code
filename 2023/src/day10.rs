@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-utils::parse!(|i| -> Vec<Vec<char>> { i.lines().map(|l| l.chars().collect()).collect() } as Map with derive(Clone));
+utils::parse_grid!(char as Map with derive(Clone));
 
 pub fn part1(map: Map) -> usize {
     collect_points(&map, locate_start(&map)).len() / 2
