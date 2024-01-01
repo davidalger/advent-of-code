@@ -35,10 +35,25 @@ impl Args {
     }
 }
 
-pub fn read_input(day: &str, input: &str) -> String {
-    let path = format!("input/{day}-{input}.txt");
+pub fn read_input(year: &str, day: &str, input: &str) -> String {
+    let mut base_dir =
+        std::path::Path::new(".").canonicalize().expect("Unable to locate current directory");
+
+    loop {
+        if base_dir.join(std::path::Path::new(".git/config")).exists() {
+            break;
+        }
+
+        if base_dir.parent().is_none() {
+            panic!("failed to find git root");
+        }
+
+        base_dir.pop();
+    }
+
+    let path = base_dir.join(std::path::Path::new(&format!("{year}/input/{day}-{input}.txt")));
     std::fs::read_to_string(&path)
-        .unwrap_or_else(|err| panic!("Unable to read file '{path}': {err}"))
+        .unwrap_or_else(|err| panic!("Unable to read file '{}': {err}", path.display()))
 }
 
 #[macro_export]
@@ -64,7 +79,7 @@ macro_rules! runner {
                 day => unimplemented!("{}", day),
             };
 
-            let input = $crate::read_input(&args.day, &args.input);
+            let input = $crate::read_input(&year, &args.day, &args.input);
 
             for (part, func, enabled) in [
                 (1, part1, args.part1 || !args.part1 ^ args.part2),
@@ -94,7 +109,7 @@ macro_rules! benches {
 
                     group.bench_with_input(
                         criterion::BenchmarkId::new(stringify!($part), $input),
-                        &$crate::read_input(stringify!($day), $input),
+                        &$crate::read_input(file!().split('/').nth(0).unwrap(), stringify!($day), $input),
                         |b, i| b.iter(|| $day::$part(criterion::black_box(i.clone().into()))),
                     );
                     group.finish();
@@ -167,7 +182,12 @@ macro_rules! parse_as_grid {
 #[macro_export]
 macro_rules! input {
     ($x:expr) => {
-        $crate::read_input(module_path!().split("::").nth(1).unwrap(), $x).into()
+        $crate::read_input(
+            module_path!().split("::").nth(0).unwrap().split("_").last().unwrap(),
+            module_path!().split("::").nth(1).unwrap(),
+            $x,
+        )
+        .into()
     };
 }
 
