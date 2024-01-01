@@ -3,3 +3,4 @@
 /input/**
 !/input/**/
 !/input/**/.gitkeep
+session.txt
