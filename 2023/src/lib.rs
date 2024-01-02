@@ -11,5 +11,6 @@ utils::runner!(
   day10,
   day11,
   day13,
+  day14,
   day23,
 );
