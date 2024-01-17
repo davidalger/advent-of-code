@@ -79,7 +79,7 @@ mod tests {
     test!(part1, "puzzle", 14560);
 
     test!(part2_sample(
-        part2(input!("sample")).lines().collect::<Vec<_>>(),
+        part2(input!("sample").into()).lines().collect::<Vec<_>>(),
         vec![
             "##..##..##..##..##..##..##..##..##..##..",
             "###...###...###...###...###...###...###.",
@@ -91,7 +91,7 @@ mod tests {
     ));
 
     test!(part2_puzzle(
-        part2(input!("puzzle")).lines().collect::<Vec<_>>(),
+        part2(input!("puzzle").into()).lines().collect::<Vec<_>>(),
         vec![
             "####.#..#.###..#..#.####.###..#..#.####.",
             "#....#.#..#..#.#..#.#....#..#.#..#....#.",

@@ -204,7 +204,6 @@ macro_rules! input {
             module_path!().split("::").nth(1).unwrap(),
             $x,
         )
-        .into()
     };
 }
 
@@ -212,7 +211,7 @@ macro_rules! input {
 macro_rules! test {
     ( $func:ident, $input:expr, $right:literal ) => {
         $crate::paste! {
-            test!([<$func _ $input>]($func($crate::input!($input)), $right));
+            test!([<$func _ $input>]($func($crate::input!($input).into()), $right));
         }
     };
     ( $func:ident($left:expr, $right:expr) ) => {
@@ -228,7 +227,7 @@ macro_rules! tests {
     ( $( ($func:ident, $input:expr, $right:literal) )+ ) => {
         $crate::paste! {
             $crate::tests! {$(
-                [<$func _ $input>]($func($crate::input!($input)), $right)
+                [<$func _ $input>]($func($crate::input!($input).into()), $right)
             )+}
         }
     };

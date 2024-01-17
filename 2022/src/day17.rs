@@ -268,11 +268,11 @@ mod tests {
     test!(part2, "sample", 1514285714288);
     test!(part2, "puzzle", 1575931232076);
 
-    test!(sim5k_sample(simulate(&input!("sample"), 5000).0.len(), 7577));
-    test!(sim5k_puzzle(simulate(&input!("puzzle"), 5000).0.len(), 7879));
+    test!(sim5k_sample(simulate(&input!("sample").into(), 5000).0.len(), 7577));
+    test!(sim5k_puzzle(simulate(&input!("puzzle").into(), 5000).0.len(), 7879));
 
     test!(sim10_sample(
-        render(&simulate(&input!("sample"), 10).0).lines().collect_vec(),
+        render(&simulate(&input!("sample").into(), 10).0).lines().collect_vec(),
         vec![
             "|....#..|",
             "|....#..|",
@@ -296,7 +296,7 @@ mod tests {
     ));
 
     test!(sim10_puzzle(
-        render(&simulate(&input!("puzzle"), 10).0).lines().collect_vec(),
+        render(&simulate(&input!("puzzle").into(), 10).0).lines().collect_vec(),
         vec![
             "|..##...|",
             "|..##...|",
